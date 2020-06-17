@@ -39,7 +39,7 @@ public class Holder {
 			}
 		}
 		if (inst == null) {
-			throw new ExceptionInInitializerError();
+			inst = new ConcurrentImpl(); // no dependencies
 		}
 		INST = inst;
 	}
