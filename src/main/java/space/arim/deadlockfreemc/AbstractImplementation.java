@@ -86,7 +86,7 @@ abstract class AbstractImplementation implements DeadlockFree {
 			}
 			unleash();
 			while (!future.isDone()) {
-				LockSupport.park(this);
+				LockSupport.park();
 				if (Thread.interrupted()) {
 					throw new InterruptedException();
 				}
