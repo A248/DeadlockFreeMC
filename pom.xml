@@ -5,7 +5,7 @@
 	
 	<groupId>space.arim</groupId>
 	<artifactId>deadlockfreemc</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	
 	<name>DeadlockFreeMC</name>
 	<description>Minecraft concurrency utility to await CompletableFuture's using a synchronous executor.</description>
@@ -82,6 +82,17 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<distributionManagement>
+		<repository>
+			<id>arim-repo</id>
+			<url>https://maven.cloudsmith.io/anand-beh/arim-repo/</url>
+		</repository>
+		<snapshotRepository>
+			<id>arim-repo</id>
+			<url>https://maven.cloudsmith.io/anand-beh/arim-repo/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	
 	<dependencies>
 		<dependency>
