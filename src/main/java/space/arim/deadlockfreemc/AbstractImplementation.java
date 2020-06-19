@@ -79,21 +79,20 @@ abstract class AbstractImplementation implements DeadlockFree {
 	public <T> T get(Future<T> future, long timeout, TimeUnit unit)
 			throws InterruptedException, ExecutionException, TimeoutException {
 		if (isPrimaryThread()) {
-			long startTime = System.nanoTime();
-			long nanosTimeout = TimeUnit.NANOSECONDS.convert(timeout, unit);
+			long deadline = System.nanoTime() + unit.toNanos(timeout);
 			if (mainThread == null) {
 				mainThread = Thread.currentThread();
 			}
-			unleash();
+			unleashWithTimeout(deadline);
 			while (!future.isDone()) {
-				LockSupport.park();
+				LockSupport.parkNanos(deadline - System.nanoTime());
 				if (Thread.interrupted()) {
 					throw new InterruptedException();
 				}
-				if (System.nanoTime() - startTime > nanosTimeout) {
+				if (System.nanoTime() - deadline >= 0) {
 					throw new TimeoutException();
 				}
-				unleash();
+				unleashWithTimeout(deadline);
 			}
 			return future.get();
 
@@ -110,6 +109,16 @@ abstract class AbstractImplementation implements DeadlockFree {
 		Runnable toRun;
 		while ((toRun = tasks.poll()) != null) {
 			toRun.run();
+		}
+	}
+	
+	private void unleashWithTimeout(long deadline) throws TimeoutException {
+		Runnable toRun;
+		while ((toRun = tasks.poll()) != null) {
+			toRun.run();
+			if (System.nanoTime() - deadline >= 0) {
+				throw new TimeoutException();
+			}
 		}
 	}
 
