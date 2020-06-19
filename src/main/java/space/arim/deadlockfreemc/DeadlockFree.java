@@ -111,7 +111,6 @@ public interface DeadlockFree extends Executor {
 	 * @param <T> the type of the future's result
 	 * @param future the future to await completion of
 	 * @return the same result as <code>future.get()</code> would return
-	 * @throws CancellationException if the future's computation was cancelled
 	 * @throws InterruptedException if interrupted while waiting
 	 * @throws ExecutionException if the future's computation threw an exception
 	 */
@@ -125,8 +124,8 @@ public interface DeadlockFree extends Executor {
 	 * @param <T> the type of the future's result
 	 * @param future the future to await completion of
 	 * @param timeout per <code>future.get(long, TimeUnit)</code>
+	 * @param unit per <code>future.get(long, TimeUnit)</code>
 	 * @return the same result as <code>future.get(timeout, unit)</code> would return
-	 * @throws CancellationException if the future's computation was cancelled
 	 * @throws InterruptedException if interrupted while waiting
 	 * @throws ExecutionException if the future's computation threw an exception
 	 * @throws TimeoutException if the timeout elapsed while waiting
