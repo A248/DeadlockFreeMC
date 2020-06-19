@@ -63,6 +63,9 @@ abstract class AbstractImplementation implements DeadlockFree {
 			if (mainThread == null) {
 				mainThread = Thread.currentThread();
 			}
+			if (Thread.interrupted()) {
+				throw new InterruptedException();
+			}
 			unleash();
 			while (!future.isDone()) {
 				LockSupport.park();
@@ -82,6 +85,9 @@ abstract class AbstractImplementation implements DeadlockFree {
 			long deadline = System.nanoTime() + unit.toNanos(timeout);
 			if (mainThread == null) {
 				mainThread = Thread.currentThread();
+			}
+			if (Thread.interrupted()) {
+				throw new InterruptedException();
 			}
 			unleashWithTimeout(deadline);
 			while (!future.isDone()) {
